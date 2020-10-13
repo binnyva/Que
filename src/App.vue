@@ -1,27 +1,40 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <QuestionArea />
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import HelloWorld from './components/HelloWorld.vue'
+import QuestionArea from './components/QuestionArea.vue'
 
 @Options({
   components: {
-    HelloWorld
+    QuestionArea
   }
 })
 export default class App extends Vue {}
 </script>
 
 <style>
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Theming */
+body { background: #eee; color: #2c3e50; }
+
+@media (prefers-color-scheme: dark) {
+  body { color: #2c3e50; background: #eee; }
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

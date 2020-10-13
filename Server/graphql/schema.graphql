@@ -1,0 +1,31 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    question(id: ID @eq): Question @find(model: "App\\Question")
+    questions(source_id: Int @eq, question: String @where(operator: "like"), status: String = "1" @eq): [Question] @all(model: "App\\Question")
+
+    tag(id: ID @eq): Tag @find(model: "App\\Tag")
+    tags(name: String @eq): [Tag] @all(model: "App\\Tag")
+
+    randomQuestion(tags: String): Question
+}
+
+type Question {
+    id: ID!
+    question: String!
+    points: Int
+    added_on: DateTime
+    updated_on: DateTime
+    status: String
+    tags: [Tag]
+}
+
+type Tag {
+    id: ID!
+    name: String!
+    questions: [Question]
+}
