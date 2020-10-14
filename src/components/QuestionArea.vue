@@ -3,7 +3,7 @@
     <div class="space-1"></div>
     <div class="question"><Question :question-text="this.questionText" /></div>
     <div class="space-2"></div>
-    <div class="controls"><Controls :new-question="this.getNewQuestion" /></div>
+    <div class="controls"><Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" /></div>
   </div>
 </template>
 
@@ -22,15 +22,20 @@ import http from '../http'
 
 export default class QuestionArea extends Vue {
   private questionText = 'Fetching a question for you...'
+  private tags: Array<string> = []
 
   private getNewQuestion (): void {
     this.getQuestion()
   }
 
+  private setTags (tags: Array<string>) {
+    this.tags = tags
+  }
+
   private getQuestion (): void {
     http.post('/graphql', {
       query: `{
-          randomQuestion(tags:"hello,world") {
+          randomQuestion(tags: "${this.tags.join(',')}") {
             id question
           }
         }`
