@@ -11,7 +11,7 @@ type Query {
     tag(id: ID @eq): Tag @find(model: "App\\Tag")
     tags(name: String @eq): [Tag] @all(model: "App\\Tag")
 
-    randomQuestion(tags: String): Question
+    randomQuestion(tags: String = "", all_tags: String = ""): Question
 }
 
 type Question {

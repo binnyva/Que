@@ -42,4 +42,35 @@ class Question extends Model
     {
         return $this->belongsTo('App\Source');
     }
+
+    // Returs all questions which is tagged with ANY of the given tags.
+    public function withTags($tags)
+    {
+        $q = app('db')->table('Question');
+        $q->join("QuestionTag", 'Question.id', '=', 'QuestionTag.question_id');
+        $q->join("Tag", 'Tag.id', '=', 'QuestionTag.tag_id');
+        $q->whereIn("Tag.name", $tags);
+        $q->where("Question.status", '1');
+
+        // dump($q->get());
+
+        return $q->get();
+    }
+
+    // Returns all questions which is tagged with ALL of the given tags.
+    public function withAllTags($tags)
+    {
+        // Lifted straigt off https://stackoverflow.com/questions/3876240/need-help-with-sql-query-to-find-things-tagged-with-all-specified-tags
+        $result = collect(app('db')->select("SELECT Q.*,Q.id AS question_id FROM Question Q
+            JOIN (SELECT QT.question_id
+                    FROM QuestionTag QT
+                    JOIN Tag T ON T.id = QT.tag_id
+                    WHERE T.name IN ('" .implode("','", $tags) . "')
+                    GROUP BY QT.question_id
+                    HAVING COUNT(DISTINCT T.name) = " . count($tags) . ") X ON X.question_id = Q.id"));
+
+        // dump($result);
+
+        return $result;
+    }
 }

@@ -19,8 +19,21 @@ class RandomQuestion
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $question = new Question;
-        $tags = $args['tags'];
-        // :TODO: Filter by tag
-        return $question->inRandomOrder()->first();
+        $tags = trim($args['tags']);
+        if($tags) {
+        	$tag_list = explode(",", str_replace(' ','', $tags));
+
+        	return $question->withTags($tag_list);
+        }
+
+        $all_tags = trim($args['all_tags']);
+        if($all_tags) {
+        	$tag_list = explode(",", str_replace(' ','', $all_tags));
+
+        	return $question->withAllTags($tag_list);
+        }
+
+
+   	    return $question->inRandomOrder()->first(); // No tags specified. Return a random question.
     }
 }
