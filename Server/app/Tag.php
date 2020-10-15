@@ -4,9 +4,12 @@ namespace App;
 
 use App\Question;
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 class Tag extends Model
 {
+    use CrudTrait;
+    
     protected $table = 'Tag';
     public $timestamps = false;
     
@@ -19,8 +22,11 @@ class Tag extends Model
         'name'
     ];
 
+    protected $identifiableAttribute = 'name';
+
     public function questions()
     {
         return $this->belongsToMany('App\Question');
     }
+
 }

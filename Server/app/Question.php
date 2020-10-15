@@ -4,9 +4,11 @@ namespace App;
 
 use App\Tag;
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 class Question extends Model
 {
+    use CrudTrait;
     protected $table = 'Question';
     public $timestamps = true;
     const CREATED_AT = 'added_on';
@@ -34,5 +36,10 @@ class Question extends Model
     public function tags()
     {
         return $this->belongsToMany('App\Tag', 'QuestionTag');
+    }
+
+    public function source()
+    {
+        return $this->belongsTo('App\Source');
     }
 }
