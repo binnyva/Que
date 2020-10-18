@@ -22,7 +22,7 @@ class CreateInitialStructure extends Migration
 
         Schema::create('Question', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('question',100);
+            $table->string('question',255);
             $table->bigInteger('source_id')->unsigned()->index('source_id');
             $table->integer('points')->default(0);
             $table->dateTime('added_on');

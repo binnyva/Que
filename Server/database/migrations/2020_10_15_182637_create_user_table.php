@@ -19,6 +19,7 @@ class CreateUserTable extends Migration
             $table->string('username',100)->nullable()->default(null);
             $table->string('password',100);
             $table->string('email',100);
+            $table->string('remember_token', 150);
             
             $table->timestamps();
         });

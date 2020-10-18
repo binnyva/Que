@@ -24,9 +24,15 @@ export default class Question extends Vue {
     align-self: center;
 }
 .question-text {
-    font-size: 5em;
+    font-size: 4em;
     margin: auto 0;
     text-align: center;
+}
+
+@media only screen and (max-width: 480px) {
+  .question-text {
+    font-size: 2.5em;
+  }
 }
 
 /* :TODO: Diffent font/color for different type of questions. Grey for philosaphical, comic-sans for funny, etc */

@@ -1,9 +1,9 @@
 <template>
+  <div class="controls"><Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" :mode="this.mode" /></div>
   <div class="grid-container">
     <div class="space-1"></div>
     <div class="question"><Question :question-text="this.questionText" /></div>
     <div class="space-2"></div>
-    <div class="controls"><Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" /></div>
   </div>
 </template>
 
@@ -21,6 +21,7 @@ import http from '../http'
 })
 
 export default class QuestionArea extends Vue {
+  private mode = 'normal'
   private questionText = 'Fetching a question for you...'
   private tags: Array<string> = []
 
@@ -33,9 +34,14 @@ export default class QuestionArea extends Vue {
   }
 
   private getQuestion (): void {
+    const tagList = this.tags
+    if (this.mode === 'confessions') {
+      tagList.push('confessions-game')
+    }
+
     http.post('/graphql', {
       query: `{
-          randomQuestion(tags: "${this.tags.join(',')}") {
+          randomQuestion(tags: "${tagList.join(',')}") {
             id question
           }
         }`
@@ -48,6 +54,11 @@ export default class QuestionArea extends Vue {
 
   created () {
     this.getQuestion()
+
+    const loc = document.location.href
+    if (loc.indexOf('#confession') > 0) {
+      this.mode = 'confessions'
+    }
   }
 }
 </script>
@@ -58,11 +69,9 @@ export default class QuestionArea extends Vue {
   height: 100vh;
   width:100%;
   display: grid;
-  grid-template-rows: 80% auto;
   grid-template-columns: 20% 60% 20%;
   grid-template-areas:
     "space-1 question space-2"
-    "controls controls controls";
 }
 .space-1 {
   grid-area: space-1;
@@ -74,10 +83,9 @@ export default class QuestionArea extends Vue {
   grid-area: question;
   align-self: center;
 }
-.controls {
-  grid-area: controls;
-  justify-self: end;
-  align-self: end;
-  padding: 0 10px 10px 0;
+@media only screen and (max-width: 480px) {
+  .grid-container {
+    grid-template-columns: 10% 80% 10%;
+  }
 }
 </style>
