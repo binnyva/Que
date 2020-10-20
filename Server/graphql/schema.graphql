@@ -9,7 +9,7 @@ type Query {
     questions(source_id: Int @eq, question: String @where(operator: "like"), status: String = "1" @eq): [Question] @all(model: "App\\Question")
 
     tag(id: ID @eq): Tag @find(model: "App\\Tag")
-    tags(name: String @eq): [Tag] @all(model: "App\\Tag")
+    tags(name: String @eq, main: String ="1" @eq): [Tag] @all(model: "App\\Tag")
 
     randomQuestion(tags: String = "", all_tags: String = ""): Question
 }
@@ -27,5 +27,6 @@ type Question {
 type Tag {
     id: ID!
     name: String!
+    main: String
     questions: [Question]
 }

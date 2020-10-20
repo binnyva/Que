@@ -52,6 +52,8 @@ class Question extends Model
         $q->whereIn("Tag.name", $tags);
         $q->where("Question.status", '1');
 
+        // dd($q->toSql(), $q->getBindings(), $tags);
+
         return $q->inRandomOrder()->first();
     }
 

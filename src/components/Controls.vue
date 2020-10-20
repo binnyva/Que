@@ -7,7 +7,7 @@
         </ul>
       </div>
 
-      <span class="fab tags">
+      <span class="fab tags" v-if="this.askedQuestion > 0">
         <span class="fab-text" v-on:click="toggleFilters()"><span class="fab-q">T</span>ags</span>
       </span>
     </div>
@@ -29,7 +29,8 @@ import TagChoice from './TagChoice.vue'
   props: {
     newQuestion: Function,
     setTags: Function,
-    mode: String
+    mode: String,
+    tags: Array
   }
 })
 
@@ -37,8 +38,9 @@ export default class Question extends Vue {
   newQuestion!: Function
   setTags!: Function
   mode: string
+  tags: Array<string> = ['deep', 'love', 'career', 'family', 'fun']
+  askedQuestion = 0
   showFilterFlag = false
-  tags = ['deep', 'nostalgic']
   selectedTags: Array<string> = []
 
   private toggleFilters (): void {
@@ -46,6 +48,7 @@ export default class Question extends Vue {
   }
 
   private getNewQuestion (): void {
+    this.askedQuestion++
     this.newQuestion()
   }
 
@@ -59,12 +62,6 @@ export default class Question extends Vue {
 
     this.setTags(this.selectedTags)
   }
-
-  created () {
-    if (this.mode === 'confessions') {
-      this.tags = ['career', 'family', 'money', 'sex', 'relationship']
-    }
-  }
 }
 </script>
 
@@ -73,26 +70,35 @@ export default class Question extends Vue {
   position: absolute;
   bottom: 10px;
   display: block;
-  width: 56px;
-  height: 56px;
-  background-color: #29B6F6;
-  border-radius: 50%;
+  width: 7rem;
+  height: 3.5rem;
+  background-color: var(--color-mid);
+  border-radius: 15%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 }
 .fab .fab-text {
   display: inline-block;
-  width: 56px;
-  height: 56px;
+  width: 7rem;
+  height: 3.5rem;
   font-size: 1em;
-  color: #fff;
-  line-height: 56px;
+  color: var(--color-light);
+  line-height: 3.5rem;
   text-align: center;
+}
+@media only screen and (max-width: 480px) {
+  .fab {
+    width: 3.5rem !important;
+    border-radius: 50% !important;
+  }
+  .fab-text {
+    width: 3.5rem !important;
+  }
 }
 .fab .fab-q {
   font-size: 2em;
 }
 .fab.que {
   right: 10px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 }
 .fab.tags {
   left: 10px;
@@ -104,7 +110,7 @@ export default class Question extends Vue {
   position: absolute;
   bottom: 8px;
   left: 10px;
-  background-color: #29B6F6;
+  background-color: var(--color-mid);
   border-radius: 10px;
   padding: 5px 5px 62px 5px;
   transition: ease-in-out;
@@ -115,15 +121,27 @@ export default class Question extends Vue {
   margin:0;
   padding:0;
 }
+.tags {
+  animation: fade-in .7s ease;
+}
 
 @keyframes expand {
-    0% {
-        width: 0;
-        height: 0;
-    }
-    100% {
-        width: auto;
-        height: auto;
-    }
+  0% {
+    width: 0;
+    height: 0;
+  }
+  100% {
+    width: auto;
+    height: auto;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="controls"><Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" :mode="this.mode" /></div>
+  <div class="controls"><Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" :tags="this.mainTags" :mode="this.mode" /></div>
   <div class="grid-container">
     <div class="space-1"></div>
     <div class="question"><Question :question-text="this.questionText" /></div>
@@ -24,6 +24,7 @@ export default class QuestionArea extends Vue {
   private mode = 'normal'
   private questionText = 'Fetching a question for you...'
   private tags: Array<string> = []
+  private mainTags: Array<string> = []
 
   private getNewQuestion (): void {
     this.getQuestion()
@@ -33,6 +34,31 @@ export default class QuestionArea extends Vue {
     this.tags = tags
   }
 
+  private firstLoad (): void {
+    let defaultTag = ''
+    if (this.mode === 'confessions') {
+      defaultTag = 'confessions-game'
+    }
+
+    http.post('/graphql', {
+      query: `{
+          randomQuestion(tags: "${defaultTag}") {
+            question
+          }
+          tags {
+            name
+          }
+        }`
+    }).then((response) => {
+      if (response.data) {
+        this.questionText = response.data.data.randomQuestion.question
+        for (const i in response.data.data.tags) {
+          this.mainTags.push(response.data.data.tags[i].name)
+        }
+      }
+    })
+  }
+
   private getQuestion (): void {
     const tagList = this.tags
     if (this.mode === 'confessions') {
@@ -40,11 +66,7 @@ export default class QuestionArea extends Vue {
     }
 
     http.post('/graphql', {
-      query: `{
-          randomQuestion(tags: "${tagList.join(',')}") {
-            id question
-          }
-        }`
+      query: `{ randomQuestion(tags: "${tagList.join(',')}") { question }}`
     }).then((response) => {
       if (response.data) {
         this.questionText = response.data.data.randomQuestion.question
@@ -53,11 +75,15 @@ export default class QuestionArea extends Vue {
   }
 
   created () {
-    this.getQuestion()
+    this.firstLoad()
 
     const loc = document.location.href
     if (loc.indexOf('#confession') > 0) {
       this.mode = 'confessions'
+    }
+
+    if (this.mode === 'confessions') {
+      this.mainTags = ['career', 'family', 'money', 'sex', 'relationship']
     }
   }
 }

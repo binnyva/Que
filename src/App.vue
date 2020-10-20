@@ -21,11 +21,29 @@ body {
   padding: 0;
 }
 
+:root {
+  --color-dark: #2c3e50;
+  --color-dark-transparent: rgba(44, 62, 80, 1);
+  --color-light: #c3d6ed;
+  --color-light-transparent: rgba(195, 214, 237, 1);
+  --color-mid: #3a73ad;
+  --color-light-transparent: rgba(58, 115, 173, 1);
+}
+
 /* Theming */
-body { background: #eee; color: #2c3e50; }
 
 @media (prefers-color-scheme: dark) {
-  body { color: #2c3e50; background: #eee; }
+  :root {
+    --color-light: #2c3e50;
+    --color-light-transparent: rgba(44, 62, 80, 1);
+    --color-dark: #c3d6ed;
+    --color-dark-transparent: rgba(195, 214, 237, 1);
+  }
+}
+
+body {
+  background: var(--color-dark);
+  color: var(--color-light);
 }
 
 #app {
