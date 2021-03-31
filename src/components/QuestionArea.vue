@@ -2,20 +2,23 @@
   <div class="controls"><Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" :tags="this.mainTags" :mode="this.mode" /></div>
   <div class="grid-container">
     <div class="space-1"></div>
-    <div class="question"><Question :question-text="this.questionText" /></div>
+    <div class="question">
+      <div class="question-area"><h3 class="question-text">{{ questionText }}</h3></div>
+      <!-- <Question :question-text="this.questionText"></Question> -->
+    </div>
     <div class="space-2"></div>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import Question from './Question.vue'
+// import Question from './Question.vue'
 import Controls from './Controls.vue'
 import http from '../http'
 
 @Options({
   components: {
-    Question,
+    // Question,
     Controls
   }
 })
@@ -52,8 +55,11 @@ export default class QuestionArea extends Vue {
     }).then((response) => {
       if (response.data) {
         this.questionText = response.data.data.randomQuestion.question
-        for (const i in response.data.data.tags) {
-          this.mainTags.push(response.data.data.tags[i].name)
+
+        if (this.mode === 'normal') {
+          for (const i in response.data.data.tags) {
+            this.mainTags.push(response.data.data.tags[i].name)
+          }
         }
       }
     })
@@ -70,6 +76,16 @@ export default class QuestionArea extends Vue {
     }).then((response) => {
       if (response.data) {
         this.questionText = response.data.data.randomQuestion.question
+
+        // Register a Google Analytics Event
+        if(window.ga && ga.loaded) {
+          ga("send", {
+            hitType: "event",
+            eventCategory: "Question",
+            eventAction: "New",
+            eventLabel: "Requested New Question",
+          })
+        }
       }
     })
   }
@@ -112,6 +128,22 @@ export default class QuestionArea extends Vue {
 @media only screen and (max-width: 480px) {
   .grid-container {
     grid-template-columns: 10% 80% 10%;
+  }
+}
+
+/* This should be in Question.vue */
+.question-area {
+    align-self: center;
+}
+.question-text {
+    font-size: 4em;
+    margin: auto 0;
+    text-align: center;
+}
+
+@media only screen and (max-width: 480px) {
+  .question-text {
+    font-size: 2.5em;
   }
 }
 </style>

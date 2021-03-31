@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import { Watch } from 'vue-property-decorator'
 
 @Options({
   props: {
@@ -15,10 +16,14 @@ import { Options, Vue } from 'vue-class-component'
 
 export default class Question extends Vue {
   questionText!: string
+
+  @Watch('questionText')
+  onQuestionTextChanged (newQ: string, oldQ: string) {
+    console.log(newQ, oldQ)
+  }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .question-area {
     align-self: center;
