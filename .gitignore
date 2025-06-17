@@ -2,6 +2,7 @@
 node_modules
 /dist
 Research/
+0Meta/
 
 # local env files
 .env.local
