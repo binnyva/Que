@@ -1,20 +1,20 @@
 <template>
   <div class="controls-area">
     <div id="tags-area">
-      <div id="filters" v-if="this.showFilterFlag">
+      <div id="filters" v-if="showFilterFlag">
         <ul>
           <TagChoice
-            v-for="(tag, index) in this.tags"
+            v-for="(tag, index) in tags"
             :key="index"
             :index="index"
             :tag="tag"
-            :change="this.onTagSelect"
-            :checked="this.checkedTags[tag]"
+            :change="onTagSelect"
+            :checked="checkedTags[tag]"
           ></TagChoice>
         </ul>
       </div>
 
-      <span class="fab tags" v-if="this.askedQuestion > 20">
+      <span class="fab tags" v-if="askedQuestion > 20">
         <span class="fab-text" v-on:click="toggleFilters()"><span class="fab-q">T</span>ags</span>
       </span>
     </div>
@@ -48,8 +48,8 @@ export default defineComponent({
       default: 'normal',
     },
     tags: {
-      type: Array,
-      default: () => [],
+      type: Array<string>,
+      default: [],
     },
   },
   data() {

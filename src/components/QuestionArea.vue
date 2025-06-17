@@ -1,11 +1,6 @@
 <template>
   <div class="controls">
-    <AppControls
-      :new-question="this.getQuestion"
-      :set-tags="this.setTags"
-      :tags="this.mainTags"
-      :mode="this.mode"
-    />
+    <AppControls :new-question="getQuestion" :set-tags="setTags" :tags="mainTags" :mode="mode" />
   </div>
   <div class="grid-container" v-on:click="screenClick()">
     <div class="space-1"></div>
@@ -115,8 +110,8 @@ export default defineComponent({
           console.error('Failed to fetch question:', response.statusText)
           this.useFallbackQuestion()
         }
-      } catch {
-        console.error('Error fetching question:', response.statusText)
+      } catch (e) {
+        console.error('Error fetching question', e)
         this.useFallbackQuestion()
       }
     },

@@ -1,12 +1,6 @@
 <template>
   <li>
-    <input
-      type="checkbox"
-      v-bind:id="`tag-${index}`"
-      v-bind:value="tag"
-      v-on:change="this.change"
-      :checked="this.checked"
-    />
+    <input type="checkbox" v-bind:id="`tag-${index}`" v-bind:value="tag" :checked="checked" />
     <label v-bind:for="`tag-${index}`">{{ tag }}</label>
   </li>
 </template>
