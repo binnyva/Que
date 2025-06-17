@@ -1,6 +1,8 @@
 <template>
-  <div class="controls"><Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" :tags="this.mainTags" :mode="this.mode" /></div>
-  <div class="grid-container">
+  <div class="controls">
+    <Controls :new-question="this.getNewQuestion" :set-tags="this.setTags" :tags="this.mainTags" :mode="this.mode" />
+  </div>
+  <div class="grid-container" v-on:click="screenClick()">
     <div class="space-1"></div>
     <div class="question">
       <div class="question-area"><h3 class="question-text">{{ questionText }}</h3></div>
@@ -77,15 +79,15 @@ export default class QuestionArea extends Vue {
       if (response.data) {
         this.questionText = response.data.data.randomQuestion.question
 
-        // Register a Google Analytics Event
-        if(window.ga && ga.loaded) {
-          ga("send", {
-            hitType: "event",
-            eventCategory: "Question",
-            eventAction: "New",
-            eventLabel: "Requested New Question",
-          })
-        }
+        // Register a Google Analytics Event :TODO: This should be active. But doesn't work in local.
+        // if (window.ga && ga.loaded) {
+        //   ga('send', {
+        //     hitType: 'event',
+        //     eventCategory: 'Question',
+        //     eventAction: 'New',
+        //     eventLabel: 'Requested New Question'
+        //   })
+        // }
       }
     })
   }
@@ -105,7 +107,6 @@ export default class QuestionArea extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .grid-container {
   height: 100vh;

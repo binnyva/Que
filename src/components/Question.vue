@@ -40,5 +40,5 @@ export default class Question extends Vue {
   }
 }
 
-/* :TODO: Diffent font/color for different type of questions. Grey for philosaphical, comic-sans for funny, etc */
+/* :TODO: Diffent font/color for different type of questions. Grey for philosaphical, comic-sans for funny, etc ? */
 </style>

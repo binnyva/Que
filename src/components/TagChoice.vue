@@ -1,6 +1,6 @@
 <template>
   <li>
-    <input type="checkbox" v-bind:id="`tag-${index}`" v-bind:value="tag" v-on:change="this.change" />
+    <input type="checkbox" v-bind:id="`tag-${index}`" v-bind:value="tag" v-on:change="this.change" :checked="this.checked" />
     <label v-bind:for="`tag-${index}`">{{ tag }}</label>
   </li>
 </template>
@@ -12,7 +12,8 @@ import { Options, Vue } from 'vue-class-component'
   props: {
     tag: String,
     index: Number,
-    change: Function
+    change: Function,
+    checked: Boolean
   }
 })
 
@@ -20,9 +21,6 @@ export default class TagChoice extends Vue {
   tag!: string
   index!: number
   change!: Function
+  checked!: boolean
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

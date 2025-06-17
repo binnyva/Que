@@ -3,7 +3,7 @@
     <div id="tags-area">
       <div id="filters" v-if="this.showFilterFlag">
         <ul>
-          <TagChoice v-for="(tag, index) in this.tags" :key="index" :index="index" :tag="tag" :change="this.onTagSelect"></TagChoice>
+          <TagChoice v-for="(tag, index) in this.tags" :key="index" :index="index" :tag="tag" :change="this.onTagSelect" :checked="this.checkedTags[tag]"></TagChoice>
         </ul>
       </div>
 
@@ -42,8 +42,9 @@ export default class Question extends Vue {
   askedQuestion = 0
   showFilterFlag = false
   selectedTags: Array<string> = []
+  checkedTags: {[key: string]: boolean} = {}
 
-  private toggleFilters (): void {
+  public toggleFilters (): void {
     this.showFilterFlag = !this.showFilterFlag
   }
 
@@ -56,8 +57,10 @@ export default class Question extends Vue {
     const ele = e.target
     if (ele.checked) {
       this.selectedTags.push(ele.value)
+      this.checkedTags[ele.value] = true
     } else {
       this.selectedTags = this.selectedTags.filter((val) => val !== ele.value)
+      this.checkedTags[ele.value] = false
     }
 
     this.setTags(this.selectedTags)
