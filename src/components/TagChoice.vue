@@ -1,26 +1,38 @@
 <template>
   <li>
-    <input type="checkbox" v-bind:id="`tag-${index}`" v-bind:value="tag" v-on:change="this.change" :checked="this.checked" />
+    <input
+      type="checkbox"
+      v-bind:id="`tag-${index}`"
+      v-bind:value="tag"
+      v-on:change="this.change"
+      :checked="this.checked"
+    />
     <label v-bind:for="`tag-${index}`">{{ tag }}</label>
   </li>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import { defineComponent } from 'vue'
 
-@Options({
+export default defineComponent({
+  name: 'TagChoice',
   props: {
-    tag: String,
-    index: Number,
-    change: Function,
-    checked: Boolean
-  }
+    tag: {
+      type: String,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+    change: {
+      type: Function,
+      required: true,
+    },
+    checked: {
+      type: Boolean,
+      default: false,
+    },
+  },
 })
-
-export default class TagChoice extends Vue {
-  tag!: string
-  index!: number
-  change!: Function
-  checked!: boolean
-}
 </script>

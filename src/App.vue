@@ -3,15 +3,15 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
 import QuestionArea from './components/QuestionArea.vue'
+import { defineComponent } from 'vue'
 
-@Options({
+export default defineComponent({
+  name: 'App',
   components: {
-    QuestionArea
-  }
+    QuestionArea,
+  },
 })
-export default class App extends Vue {}
 </script>
 
 <style>
