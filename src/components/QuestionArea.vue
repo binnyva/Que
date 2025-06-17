@@ -27,9 +27,42 @@ import http from '../http'
 
 export default class QuestionArea extends Vue {
   private mode = 'normal'
-  private questionText = 'Fetching a question for you...'
+  private questionText = 'I have a question for you...'
   private tags: Array<string> = []
   private mainTags: Array<string> = []
+
+  private fallbackQuestions = [
+    'What were you really into when you were a kid?',
+    'Would you rather Go canoeing or waterskiing?',
+    'Have you ever lost a friend? If so, what happened?',
+    'What scientific discovery would change the course of humanity overnight if it was discovered?',
+    'After a long pursuit you realise someone is as keen on you as you are on them. What feelings does this bring up for you?',
+    "How old were you when you learned Santa wasn't real? How did you find out?",
+    'Do you always have to have the latest phone?',
+    "What's your day-to-day mantra?",
+    'A genie gives you three wishes! What are they?',
+    'What is your favorite meal of the day?',
+    'How could carousels be spiced up so they are more exciting?',
+    'What was the last book you read? And When?',
+    "Where would you like to be if you weren't here, and why?",
+    'Have you always had the same political beliefs? Is there something that impacted them?',
+    "What's the best way you or someone you know has gotten out of a ticket / trouble with the law?",
+    'Has anything from your childhood made you preternaturally anxious?',
+    'Who in your family would you describe as a "character"?',
+    'What did you always wanted to try but never found the courage to do?',
+    "Would you rather have the hiccups for the rest of your life, or always feel like you need to sneeze but can't?",
+    "Where's the line between soup and cereal?",
+    "What's something you've been meaning to try but just haven't gotten around to it?",
+    "Where is the most interesting place you've been?",
+    'If you had a family business, what would it be?',
+    'If scientists could accurately predict who was more likely to commit crimes, what should society do with that information?',
+    "What's the most interesting piece of art you've seen?",
+    'When was the last time you stayed up through the entire night?',
+    'In the past people were buried with the items they would need in the afterlife, what would you want buried with you so you could use it in the afterlife?',
+    'Do athletes deserve the high salaries they receive? Why or why not?',
+    'Would you rather watch a movie on your TV at home or on the big screen in the theater, and why?',
+    'Who is that one person you can talk to about just anything?'
+  ];
 
   private getNewQuestion (): void {
     this.getQuestion()
@@ -39,31 +72,31 @@ export default class QuestionArea extends Vue {
     this.tags = tags
   }
 
+  private activeFallbackQuestion (): void {
+    const randomIndex = Math.floor(Math.random() * this.fallbackQuestions.length)
+    this.questionText = this.fallbackQuestions[randomIndex]
+  }
+
   private firstLoad (): void {
     let defaultTag = ''
     if (this.mode === 'confessions') {
       defaultTag = 'confessions-game'
     }
 
-    http.post('/graphql', {
-      query: `{
-          randomQuestion(tags: "${defaultTag}") {
-            question
-          }
-          tags {
-            name
-          }
-        }`
-    }).then((response) => {
+    http.get('/api').then((response) => {
       if (response.data) {
-        this.questionText = response.data.data.randomQuestion.question
+        this.questionText = response.data.question
 
         if (this.mode === 'normal') {
-          for (const i in response.data.data.tags) {
+          for (const i in response.data.tags) {
             this.mainTags.push(response.data.data.tags[i].name)
           }
         }
       }
+    }).catch((error) => {
+      console.error('Error fetching initial question:', error)
+
+      this.activeFallbackQuestion()
     })
   }
 
@@ -73,9 +106,7 @@ export default class QuestionArea extends Vue {
       tagList.push('confessions-game')
     }
 
-    http.post('/graphql', {
-      query: `{ randomQuestion(tags: "${tagList.join(',')}") { question }}`
-    }).then((response) => {
+    http.get('/api').then((response) => {
       if (response.data) {
         this.questionText = response.data.data.randomQuestion.question
 
@@ -89,7 +120,14 @@ export default class QuestionArea extends Vue {
         //   })
         // }
       }
+    }).catch((error) => {
+      console.error('Error fetching question:', error)
+      this.activeFallbackQuestion()
     })
+  }
+
+  screenClick (): void {
+    this.getNewQuestion()
   }
 
   created () {

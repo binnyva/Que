@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-let url = `http://${window.location.hostname}/Projects/Que/Server/public`
+let url = `http://${window.location.hostname}/Projects/Que`
 if (window.location.hostname.indexOf('apps.binnyva.com') >= 0) {
-  url = 'https://apps.binnyva.com/que/Que/Server/public'
+  url = 'https://apps.binnyva.com/que'
 }
 
 export default axios.create({
