@@ -16,7 +16,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import AppControls from './AppControls.vue'
-import { apiBaseUrl } from '../config'
+import { apiBaseUrl, defaultTags } from '../config'
 
 export default defineComponent({
   name: 'QuestionArea',
@@ -28,7 +28,7 @@ export default defineComponent({
       mode: 'normal',
       questionText: 'I have a question for you...',
       tags: [] as Array<string>,
-      mainTags: [] as Array<string>,
+      mainTags: defaultTags,
       fallbackQuestions: [
         'What were you really into when you were a kid?',
         'Would you rather Go canoeing or waterskiing?',
@@ -92,7 +92,8 @@ export default defineComponent({
       }
 
       try {
-        const response = await fetch(apiBaseUrl + '/api/')
+        const tagFilter = tagList.length > 0 ? '?tags=' + tagList.join(',') : ''
+        const response = await fetch(`${apiBaseUrl}/api/${tagFilter}`)
         if (response.ok) {
           const json = await response.json()
           this.questionText = json.data.question

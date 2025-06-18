@@ -3,4 +3,15 @@ const apiBaseUrl =
     ? 'https://apps.binnyva.com/que'
     : `http://${window.location.hostname}/Projects/Que`
 
-export { apiBaseUrl }
+const defaultTags = [
+  'deep',
+  'love',
+  'career',
+  'family',
+  'vulnerability',
+  'fun',
+  'sex',
+  'relationship',
+]
+
+export { apiBaseUrl, defaultTags }

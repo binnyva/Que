@@ -14,8 +14,10 @@
         </ul>
       </div>
 
-      <span class="fab tags" v-if="askedQuestion > 20">
-        <span class="fab-text" v-on:click="toggleFilters()"><span class="fab-q">T</span>ags</span>
+      <span class="fab tags" v-if="askedQuestion > 0">
+        <span class="fab-text" v-on:click="toggleFilters()"
+          ><span class="fab-q">C</span>ategories</span
+        >
       </span>
     </div>
 
@@ -28,6 +30,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import TagChoice from './TagChoice.vue'
+import { defaultTags } from '@/config'
 
 export default defineComponent({
   name: 'AppControls',
@@ -49,16 +52,21 @@ export default defineComponent({
     },
     tags: {
       type: Array<string>,
-      default: [],
+      default: defaultTags,
     },
   },
   data() {
     return {
       askedQuestion: 0,
       showFilterFlag: false,
-      selectedTags: [] as Array<string>,
       checkedTags: {} as { [key: string]: boolean },
     }
+  },
+  created() {
+    // Initialize checkedTags with default tags
+    this.tags.forEach((tag) => {
+      this.checkedTags[tag] = true
+    })
   },
   methods: {
     toggleFilters() {
@@ -70,17 +78,10 @@ export default defineComponent({
       this.newQuestion()
     },
 
-    onTagSelect(e: { target: HTMLInputElement }): void {
-      const ele = e.target
-      if (ele.checked) {
-        this.selectedTags.push(ele.value)
-        this.checkedTags[ele.value] = true
-      } else {
-        this.selectedTags = this.selectedTags.filter((val) => val !== ele.value)
-        this.checkedTags[ele.value] = false
-      }
-
-      this.setTags(this.selectedTags)
+    onTagSelect(tag: string, checked: boolean) {
+      this.checkedTags[tag] = checked
+      const selectedTags = Object.keys(this.checkedTags).filter((key) => this.checkedTags[key])
+      this.setTags(selectedTags)
     },
   },
 })
